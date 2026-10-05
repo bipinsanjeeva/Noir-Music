@@ -1,8 +1,8 @@
-# Privacy Policy for Echo Music App
+# Privacy Policy for Noir Music App
 
 ## Introduction
 
-Echo Music ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application (the "App").
+Noir Music ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application (the "App").
 
 ## Information We Collect
 
@@ -141,5 +141,5 @@ This Privacy Policy complies with:
 
 ---
 
-**By using Echo Music, you agree to the collection and use of information in accordance with this Privacy Policy.**
+**By using Noir Music, you agree to the collection and use of information in accordance with this Privacy Policy.**
 

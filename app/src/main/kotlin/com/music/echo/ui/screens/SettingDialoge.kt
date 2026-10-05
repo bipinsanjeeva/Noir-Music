@@ -73,7 +73,7 @@ fun SettingDialoge(
       verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
       // Header
-      // Removed Echo Music text
+      // Removed Noir Music text
 
       // Account Group
       Material3SettingsGroup(

@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/banner.png" alt="Echo Music Logo"/>
+  <img src="assets/banner.png" alt="Noir Music Logo"/>
 
   <p><b>A modern Android music app with ad-free streaming, synced lyrics, offline playback, and an intuitive user experience.</b></p>
 </div>
@@ -8,14 +8,12 @@
 
 ## Overview
 
-Echo Music delivers a seamless, premium listening experience by leveraging YouTube Music's vast library — without the ads. It adds powerful extras including offline downloads, real-time synchronized lyrics, and environment-aware music recognition.
+Noir Music is an independent fork of the Echo Music open-source project, with a customized identity and user interface.
+
+Noir Music delivers a seamless, premium listening experience by leveraging YouTube Music's vast library — without the ads. It adds powerful extras including offline downloads, real-time synchronized lyrics, and environment-aware music recognition.
 
 > [!IMPORTANT]
-> **In-app OTA updates have been permanently removed.** Please update manually via the website. Echo Music is completely free and ad-free; the few ads shown during a manual download help support the ongoing development of this project. Please do not open issues requesting to bring this back. Thank you for your support!
-
----
-
-- **Discord**: [Join the Echo Music Discord server](https://discord.gg/Xt5hgsJJuA)
+> **In-app OTA updates have been permanently removed.** Please update manually via the website. Noir Music is completely free and ad-free; the few ads shown during a manual download help support the ongoing development of this project. Please do not open issues requesting to bring this back. Thank you for your support!
 
 ---
 
@@ -28,6 +26,7 @@ Echo Music delivers a seamless, premium listening experience by leveraging YouTu
 - [Support the Project](#support-the-project)
 - [Contributors](#contributors)
 - [Special Thanks](#special-thanks)
+- [Legal Disclaimer & Terms of Use](#legal-disclaimer--terms-of-use)
 
 ---
 
@@ -114,7 +113,7 @@ Echo Music delivers a seamless, premium listening experience by leveraging YouTu
 
 - **Multiple Lyric Animations** — Choose from various lyric display styles.
 - **Word-by-Word Lyrics** — Precise per-word synchronization.
-- **Lyrics+** — New lyrics provider for improved accuracy and coverage.
+- **Lyrics+</b> — New lyrics provider for improved accuracy and coverage.
 - **AI Translation** — Built-in Google Translate integration for lyrics in any language.
 
 </details>
@@ -157,7 +156,7 @@ Echo Music delivers a seamless, premium listening experience by leveraging YouTu
 
 ### Android Installation
 
-Download the latest pre-compiled APK from the [Releases Page](https://github.com/EchoMusicApp/Echo-Music/releases/latest).
+Download the latest pre-compiled APK from the [Noir Music Releases Page](https://github.com/bipinsanjeeva/Echo-Music/releases).
 
 <details>
 <summary><b>Building from Source</b></summary>
@@ -166,131 +165,75 @@ Download the latest pre-compiled APK from the [Releases Page](https://github.com
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/iad1tya/Echo-Music.git
+   git clone https://github.com/bipinsanjeeva/Echo-Music.git
    cd Echo-Music
-   ```
 
-2. **Configure Android SDK**
-   Create a `local.properties` file:
-
-   ```bash
+2. Configure Android SDK
+   Create a local.properties file:
    echo "sdk.dir=/path/to/your/android/sdk" > local.properties
-   ```
 
-   _(For detailed paths on Windows/macOS/Linux, refer to [SETUP.md](SETUP.md))_
-
-3. **Firebase Configuration (Optional)**
-   Firebase is required for analytics and crash reporting. See the instructions in [SETUP.md](SETUP.md#3-configure-firebase-optional) for adding your `google-services.json`.
-
-4. **Build the Application**
-   Echo Music has two build variants: **FOSS** (without Google Play Services / Cast) and **GMS** (with Cast support).
-
-   - To build the **FOSS** Universal Debug variant:
-     ```bash
-     ./gradlew assembleUniversalFossDebug
-     ```
-   - To build the **GMS** Universal Debug variant:
-     ```bash
-     ./gradlew assembleUniversalGmsDebug
-     ```
-
-   _(For optimized ARM64 builds, release builds, or other options, refer to [SETUP.md](SETUP.md))_
-
+   (For detailed paths on Windows/macOS/Linux, refer to [SETUP.md](SETUP.md))
+3. Firebase Configuration (Optional)
+   Firebase configuration is optional depending on the build configuration. See [SETUP.md](SETUP.md) for configuration instructions.
+4. Build the Application
+   Noir Music has two build variants: FOSS and GMS.
+    - To build the FOSS Universal Debug variant:
+      ./gradlew assembleUniversalFossDebug
+    - To build the GMS Universal Debug variant:
+      ./gradlew assembleUniversalGmsDebug
+      (For optimized ARM64 builds, release builds, or other options, refer to [SETUP.md](SETUP.md))
 </details>
 
----
-
-## Support the Project
-
-If Echo Music has been useful to you, consider supporting its development.
-
+Support the Project
+If Noir Music has been useful to you, consider supporting its development.
 <div align="left">
   <table style="margin: 0 auto; border-collapse: collapse; border: none;">
     <tr>
       <td align="center" style="padding: 15px; border: none;">
-        <a href="https://buymeacoffee.com/iad1tya" style="text-decoration:none;"><img src="assets/bmac.png" alt="Buy Me A Coffee Logo" width="140" style="border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/></a>
+        <a href="https://buymeacoffee.com/bipinsanjeeva" style="text-decoration:none;">
+          <img src="assets/bmac.png" alt="Buy Me A Coffee Logo" width="140" style="border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/>
+        </a>
       </td>
-      <td align="center" style="padding: 15px; border: none;">
-        <a href="https://intradeus.github.io/http-protocol-redirector/?r=upi://pay?pa=iad1tya@upi&pn=Aditya%20Yadav&am=&tn=Thank%20You" style="text-decoration:none;"><img src="assets/UPI.png" alt="UPI Logo" width="140" style="border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/></a>
-      </td>
-      <td align="center" style="padding: 15px; border: none;">
-        <a href="https://www.patreon.com/cw/iad1tya" style="text-decoration:none;"><img src="assets/patreon3.webp" alt="Patreon Logo" width="140" style="border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/></a>
-      </td>
-    </tr>
+
+  <td align="center" style="padding: 15px; border: none;">
+    <a href="upi://pay?pa=here.bipins@oksbi&pn=Noir%20Music&cu=INR" style="text-decoration:none;">
+      <img src="assets/UPI.png" alt="UPI Logo" width="140" style="border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/>
+    </a>
+  </td>
+</tr>
+
   </table>
 </div>
 
-<br>
-
-<details>
-<summary><b>Cryptocurrency Options</b></summary>
-<br>
-
-| Network      | Address                                        |
-| :----------- | :--------------------------------------------- |
-| **Bitcoin**  | `bc1qcvyr7eekha8uytmffcvgzf4h7xy7shqzke35fy`   |
-| **Ethereum** | `0x51bc91022E2dCef9974D5db2A0e22d57B360e700`   |
-| **Solana**   | `9wjca3EQnEiqzqgy7N5iqS1JGXJiknMQv6zHgL96t94S` |
-
-</details>
-
----
-
-## Contributors
-
-Without the support of this incredible open-source community, none of this would be possible. Thank you to everyone who has contributed to Echo Music!
-
-<!-- readme: contributors -start -->
-<table>
-<tr><td align="center"><a href="https://github.com/iad1tya"><img src="https://avatars.githubusercontent.com/u/147871321?v=4" width="60" height="60" /></a></td><td align="center"><a href="https://github.com/Roshan-aa11"><img src="https://avatars.githubusercontent.com/u/192568043?v=4" width="60" height="60" /></a></td><td align="center"><a href="https://github.com/mdakashhossain1"><img src="https://avatars.githubusercontent.com/u/85729564?v=4" width="60" height="60" /></a></td><td align="center"><a href="https://github.com/Rajendra0309"><img src="https://avatars.githubusercontent.com/u/103703747?v=4" width="60" height="60" /></a></td><td align="center"><a href="https://github.com/soumya-99"><img src="https://avatars.githubusercontent.com/u/59480692?v=4" width="60" height="60" /></a></td><td align="center"><a href="https://github.com/VardhmanSurana"><img src="https://avatars.githubusercontent.com/u/100058534?v=4" width="60" height="60" /></a></td><td align="center"><a href="https://github.com/kaunkrishna"><img src="https://avatars.githubusercontent.com/u/270065466?v=4" width="60" height="60" /></a></td><td align="center"><a href="https://github.com/andrewvalletta"><img src="https://avatars.githubusercontent.com/u/137303110?v=4" width="60" height="60" /></a></td></tr>
-<tr><td align="center"><a href="https://github.com/Thibaultjaigu"><img src="https://avatars.githubusercontent.com/u/84420566?v=4" width="60" height="60" /></a></td></tr>
-</table>
-<!-- readme: contributors -end -->
+Contributors
+Noir Music is an independent fork of the Echo Music open-source project.
+The original project and its contributors remain credited through the project's source history and attribution. This fork does not claim ownership of the original contributors' work.
+Special Thanks
+Noir Music stands on the shoulders of several excellent open-source projects. Sincere thanks to:
+Project	Description
+Metrolist & Vivi Music	Foundational inspiration and architecture reference
+ArchiveTune	Material You UI inspiration
+Better Lyrics	Lyrics enhancement and synchronization
+SimpMusic	Lyrics implementation reference
+Music Recognizer	Audio recognition
+BravePipe	Decryption handling and backup playback engine
 
 
----
-
-## Special Thanks
-
-Echo Music stands on the shoulders of several excellent open-source projects. Sincere thanks to:
-
-| Project                                                                                                                   | Description                                         |
-| :------------------------------------------------------------------------------------------------------------------------ | :-------------------------------------------------- |
-| **[Metrolist](https://github.com/MetrolistGroup/Metrolist)** & **[Vivi Music](https://github.com/vivizzz007/vivi-music)** | Foundational inspiration and architecture reference |
-| **[ArchiveTune](https://github.com/koiverse/ArchiveTune)**                                                                | Material You UI inspiration                         |
-| **[Better Lyrics](https://better-lyrics.boidu.dev/)**                                                                     | Lyrics enhancement and synchronization              |
-| **[SimpMusic](https://github.com/maxrave-dev/SimpMusic)**                                                                 | Lyrics implementation reference                     |
-| **[Music Recognizer](https://github.com/aleksey-saenko/MusicRecognizer)**                                                 | Audio recognition (Echo Find)                       |
-| **[BravePipe](https://github.com/bravepipeproject/BravePipe)**                                                            | Decryption handling and backup playback engine      |
-
----
-
-## Legal Disclaimer & Terms of Use
-
-### 1. 100% Free, Open-Source & Strictly Non-Commercial
-
-Echo Music is a fully open-source project (FOSS) created purely for educational purposes and personal use. We do not sell this application, nor do we monetize it in any way. There are no advertisements, no premium features, no subscriptions, and no hidden fees within the app. This project has absolutely no commercial value or financial intent.
-
-### 2. A Custom Browser with Content Filtering
-
-Echo Music acts strictly as a specialized, third-party web browser and client. It simply parses the publicly available website content and APIs of YouTube and YouTube Music, rendering them in a custom user interface. The ad-free experience it provides is fundamentally no different from using a standard web browser (like Chrome, Firefox, or Brave) equipped with a common ad-blocking extension (such as uBlock Origin).
-
-### 3. Support Content Creators
-
-We deeply respect the hard work of artists, musicians, and content creators. We strongly encourage all users to subscribe to [YouTube Premium](https://www.youtube.com/premium). Purchasing a Premium subscription is the best way to financially support the creators you listen to and ensure the continued growth of the platform. Echo Music is built as a proof-of-concept for developers and enthusiasts, not to harm creators' revenues.
-
-### 4. No Hosting of Copyrighted Material
-
-We do not host, upload, distribute, or store any audio, video, or copyrighted media files on our own servers. All content accessed through this application is stored entirely on Google's/YouTube's servers and remains the property of their respective copyright owners. The app merely acts as a conduit to stream publicly accessible links.
-
-### 5. User Responsibility & Legal Contact
-
-The software is provided "AS IS", without warranty of any kind. The developers of Echo Music do not encourage or condone piracy. Users are solely responsible for ensuring their usage of this app complies with their local copyright laws and the Terms of Service of the platforms they access.
-
-Because we do not host any media files, we cannot process DMCA takedown requests for audio or video content. However, if you represent a copyright holder or have legal concerns regarding the open-source code itself, please contact us via email at: [hello@echomusic.fun](mailto:hello@echomusic.fun)
-
----
-
-<div align="center">
-  <p>Licensed under <a href="LICENSE">GPL-3.0</a></p>
-</div>
+Legal Disclaimer & Terms of Use
+1. Open-Source Project
+   Noir Music is an open-source fork of the Echo Music project and is distributed under the GPL-3.0 license.
+   This project is provided for educational and personal use. Please review the applicable licenses and terms of the services accessed through the application.
+2. Third-Party Content
+   Noir Music is a third-party client that accesses publicly available content and services provided by third parties, including YouTube and YouTube Music.
+   Noir Music is not affiliated with, endorsed by, or sponsored by YouTube, Google, or the original Echo Music developers.
+3. Support Content Creators
+   We respect the work of artists, musicians, and content creators.
+   Users are encouraged to support creators through official platforms and services.
+4. No Hosting of Copyrighted Material
+   Noir Music does not host or upload audio, video, or other copyrighted media on its own servers.
+   Content accessed through the application remains the property of its respective copyright owners.
+5. User Responsibility
+   The software is provided "AS IS", without warranty of any kind.
+   Users are responsible for ensuring that their use of the application complies with applicable laws and the Terms of Service of the platforms they access.
+   For concerns regarding the Noir Music project or its code, contact:
+   bipinhere.work@gmail.com
