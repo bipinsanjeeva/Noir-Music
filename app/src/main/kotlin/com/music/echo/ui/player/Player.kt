@@ -348,7 +348,7 @@ fun BottomSheetPlayer(
     rememberPreference(echo.music.iad1tya.constants.AutomixDebugOverlayKey, false)
 
   var currentAudioFormat by remember { mutableStateOf<androidx.media3.common.Format?>(null) }
-  DisposableEffect(playerConnection, isCrossfading) {
+  DisposableEffect(playerConnection) {
     val playerToListen = playerConnection.player
     val listener =
       object : Player.Listener {
@@ -533,8 +533,10 @@ fun BottomSheetPlayer(
   var gradientColors by remember { mutableStateOf<List<Color>>(emptyList()) }
   val gradientColorsCache = remember { mutableMapOf<String, List<Color>>() }
 
-  if (!canSkipNext && automix.isNotEmpty()) {
-    playerConnection.service.addToQueueAutomix(automix[0], 0)
+  LaunchedEffect(canSkipNext, automix) {
+    if (!canSkipNext && automix.isNotEmpty()) {
+      playerConnection.service.addToQueueAutomix(automix[0], 0)
+    }
   }
 
   val bluetoothDeviceName by
