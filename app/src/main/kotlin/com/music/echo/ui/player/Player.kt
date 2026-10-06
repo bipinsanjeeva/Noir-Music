@@ -632,7 +632,7 @@ fun BottomSheetPlayer(
           val request =
             ImageRequest.Builder(context)
               .data(currentMetadata.thumbnailUrl)
-              .size(100, 100)
+              .size(64, 64)
               .allowHardware(false)
               .memoryCacheKey("gradient_${currentMetadata.id}")
               .build()
@@ -643,7 +643,7 @@ fun BottomSheetPlayer(
             if (bitmap != null) {
               val palette =
                 withContext(Dispatchers.Default) {
-                  Palette.from(bitmap).maximumColorCount(8).resizeBitmapArea(100 * 100).generate()
+                  Palette.from(bitmap).maximumColorCount(8).resizeBitmapArea(64 * 64).generate()
                 }
               val extractedColors =
                 if (playerBackground == PlayerBackgroundStyle.GLOW_ANIMATED) {
