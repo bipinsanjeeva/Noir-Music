@@ -119,9 +119,9 @@ We may update this Privacy Policy from time to time. We will notify you of any c
 
 If you have any questions about this Privacy Policy or our data practices, please contact us:
 
-- **GitHub**: [https://github.com/iad1tya/Echo-Music](https://github.com/iad1tya/Echo-Music)
-- **Issues**: [https://github.com/iad1tya/Echo-Music/issues](https://github.com/iad1tya/Echo-Music/issues)
-- **Discussions**: [https://github.com/iad1tya/Echo-Music/discussions](https://github.com/iad1tya/Echo-Music/discussions)
+- **GitHub**: [https://github.com/bipinsanjeeva/Noir-Music](https://github.com/bipinsanjeeva/Noir-Music)
+- **Issues**: [https://github.com/bipinsanjeeva/Noir-Music/issues](https://github.com/bipinsanjeeva/Noir-Music/issues)
+- **Discussions**: [https://github.com/bipinsanjeeva/Noir-Music/discussions](https://github.com/bipinsanjeeva/Noir-Music/discussions)
 
 ## Data Protection Compliance
 

@@ -3,7 +3,7 @@
 This document tracks all available releases for Noir Music. 
 
 ## [v1.2.2] - 2026-08-28 (Latest)
-[Download on GitHub](https://github.com/EchoMusicApp/Echo-Music/releases/tag/v1.2.2)
+[Download on GitHub](https://github.com/bipinsanjeeva/Noir-Music/releases/tag/v1.2.2)
 
 **Bug Fixes**
 - Fixed a crash that occurred when adding a song to a playlist, album, or artist before it was fully loaded.
@@ -18,7 +18,7 @@ This document tracks all available releases for Noir Music.
 - Updated select app components to their latest stable versions for improved reliability.
 
 ## [v1.2.1] - 2026-08-28
-[Download on GitHub](https://github.com/EchoMusicApp/Echo-Music/releases/tag/v1.2.1)
+[Download on GitHub](https://github.com/bipinsanjeeva/Noir-Music/releases/tag/v1.2.1)
 
 I am pleased to announce the initial release of the updated Noir Music repository.
 

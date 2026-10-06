@@ -62,182 +62,189 @@ import org.json.JSONObject
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpdateSettings(
-  navController: NavController,
-  scrollBehavior: TopAppBarScrollBehavior,
-  highlightKey: String? = null
+    navController: NavController,
+    scrollBehavior: TopAppBarScrollBehavior,
+    highlightKey: String? = null
 ) {
-  val scrollState = androidx.compose.foundation.rememberScrollState()
+    val scrollState = androidx.compose.foundation.rememberScrollState()
 
-  val context = LocalContext.current
-  var autoUpdateEnabled by remember { mutableStateOf(getAutoUpdateCheckSetting(context)) }
-  var updateNotificationsEnabled by remember {
-    mutableStateOf(getUpdateNotificationsSetting(context))
-  }
-  var betaUpdatesEnabled by remember { mutableStateOf(getBetaUpdatesSetting(context)) }
-  val isUpdateAvailable = getUpdateAvailableState(context) && autoUpdateEnabled
-  var apkCount by remember { mutableStateOf(getDownloadedApkCount(context)) }
-  var showInfoDialog by remember { mutableStateOf(false) }
-  var releaseNotes by remember { mutableStateOf<String?>(null) }
-
-  LaunchedEffect(Unit) {
-    autoClearOldApks(context)
-    apkCount = getDownloadedApkCount(context)
-
-    kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-      try {
-        val url =
-          java.net.URL("https://api.github.com/repos/EchoMusicApp/Echo-Music/releases/latest")
-        val json = url.openStream().bufferedReader().use { it.readText() }
-        val targetRelease = JSONObject(json)
-        releaseNotes = targetRelease.getString("body")
-      } catch (e: Exception) {
-        e.printStackTrace()
-      }
+    val context = LocalContext.current
+    var autoUpdateEnabled by remember { mutableStateOf(getAutoUpdateCheckSetting(context)) }
+    var updateNotificationsEnabled by remember {
+        mutableStateOf(getUpdateNotificationsSetting(context))
     }
-  }
+    var betaUpdatesEnabled by remember { mutableStateOf(getBetaUpdatesSetting(context)) }
+    val isUpdateAvailable = getUpdateAvailableState(context) && autoUpdateEnabled
+    var apkCount by remember { mutableStateOf(getDownloadedApkCount(context)) }
+    var showInfoDialog by remember { mutableStateOf(false) }
+    var releaseNotes by remember { mutableStateOf<String?>(null) }
 
-  if (showInfoDialog) {
-    UpdateInfoDialog(onDismiss = { showInfoDialog = false })
-  }
+    LaunchedEffect(Unit) {
+        autoClearOldApks(context)
+        apkCount = getDownloadedApkCount(context)
 
-  Column(
-    Modifier.windowInsetsPadding(
-        LocalPlayerAwareWindowInsets.current.only(WindowInsetsSides.Horizontal)
-      )
-      .verticalScroll(scrollState)
-      .padding(horizontal = 16.dp),
-  ) {
-    Spacer(
-      Modifier.windowInsetsPadding(LocalPlayerAwareWindowInsets.current.only(WindowInsetsSides.Top))
-    )
-
-    Spacer(modifier = Modifier.height(16.dp))
-
-    Material3SettingsGroup(
-      scrollState = scrollState,
-      title = stringResource(R.string.app_updates_title),
-      items =
-        listOf(
-          Material3SettingsItem(
-            isHighlighted = (highlightKey == stringResource(R.string.system_update)),
-            icon = painterResource(R.drawable.update),
-            title = { Text(stringResource(R.string.system_update)) },
-            description = {
-              if (isUpdateAvailable) {
-                Text(
-                  text = "New update is available",
-                  color = androidx.compose.ui.graphics.Color.Red
-                )
-              } else {
-                Text(stringResource(R.string.version, BuildConfig.VERSION_NAME))
-              }
-            },
-            onClick = {
-              val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://echomusic.fun"))
-              context.startActivity(intent)
+        kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+            try {
+                val url =
+                    java.net.URL(
+                        "https://api.github.com/repos/bipinsanjeeva/Noir-Music/releases/latest"
+                    )
+                val json = url.openStream().bufferedReader().use { it.readText() }
+                val targetRelease = JSONObject(json)
+                releaseNotes = targetRelease.getString("body")
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-          )
-        )
-    )
-
-    Text(
-      text =
-        "To download updates, you will be redirected to our official site containing ads. This helps fund the app's development. Thank you for your support!",
-      style = MaterialTheme.typography.bodySmall,
-      color = MaterialTheme.colorScheme.onSurfaceVariant,
-      modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp)
-    )
-
-    releaseNotes?.let { notes ->
-      echo.music.iad1tya.ui.component.PreferenceGroupTitle(title = "What's New")
-      androidx.compose.material3.Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp),
-        colors =
-          androidx.compose.material3.CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
-          ),
-        elevation = androidx.compose.material3.CardDefaults.cardElevation(defaultElevation = 0.dp)
-      ) {
-        Column(modifier = Modifier.fillMaxWidth().padding(20.dp)) {
-          val (effectiveDescription, effectiveSections) =
-            remember(notes) { parseMarkdownToSections(notes) }
-
-          if (!effectiveDescription.isNullOrBlank()) {
-            Text(
-              text = parseSimpleMarkdown(effectiveDescription, MaterialTheme.colorScheme.primary),
-              style = MaterialTheme.typography.bodyMedium,
-              color = MaterialTheme.colorScheme.onSurfaceVariant,
-              modifier = Modifier.padding(bottom = 8.dp)
-            )
-          }
-
-          if (effectiveSections.isNotEmpty()) {
-            effectiveSections.forEachIndexed { sectionIndex, section ->
-              if (section.title.isNotBlank()) {
-                Text(
-                  text = parseSimpleMarkdown(section.title, MaterialTheme.colorScheme.primary),
-                  style = MaterialTheme.typography.titleSmall,
-                  fontWeight = FontWeight.Bold,
-                  color = MaterialTheme.colorScheme.primary,
-                  modifier =
-                    Modifier.padding(
-                      top =
-                        if (sectionIndex == 0 && effectiveDescription.isNullOrBlank()) 0.dp
-                        else 10.dp,
-                      bottom = 4.dp
-                    )
-                )
-              }
-              section.items.forEach { item ->
-                if (item.isNotBlank()) {
-                  Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                  ) {
-                    Text(
-                      text = "•",
-                      style = MaterialTheme.typography.bodyMedium,
-                      color = MaterialTheme.colorScheme.primary,
-                      fontWeight = FontWeight.Bold,
-                    )
-                    Text(
-                      text = parseSimpleMarkdown(item.trim(), MaterialTheme.colorScheme.primary),
-                      style = MaterialTheme.typography.bodyMedium,
-                      color = MaterialTheme.colorScheme.onSurfaceVariant,
-                      modifier = Modifier.weight(1f)
-                    )
-                  }
-                }
-              }
-            }
-          } else if (effectiveDescription.isNullOrBlank()) {
-            Text(
-              text = parseSimpleMarkdown(notes, MaterialTheme.colorScheme.primary),
-              style = MaterialTheme.typography.bodyMedium,
-              color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-          }
         }
-      }
-      Spacer(modifier = Modifier.height(16.dp))
     }
 
-    Spacer(modifier = Modifier.height(16.dp))
+    if (showInfoDialog) {
+        UpdateInfoDialog(onDismiss = { showInfoDialog = false })
+    }
 
-    Spacer(
-      Modifier.windowInsetsPadding(
-        LocalPlayerAwareWindowInsets.current.only(WindowInsetsSides.Bottom)
-      )
+    Column(
+        Modifier.windowInsetsPadding(
+            LocalPlayerAwareWindowInsets.current.only(WindowInsetsSides.Horizontal)
+        )
+            .verticalScroll(scrollState)
+            .padding(horizontal = 16.dp),
+    ) {
+        Spacer(
+            Modifier.windowInsetsPadding(LocalPlayerAwareWindowInsets.current.only(WindowInsetsSides.Top))
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Material3SettingsGroup(
+            scrollState = scrollState,
+            title = stringResource(R.string.app_updates_title),
+            items =
+                listOf(
+                    Material3SettingsItem(
+                        isHighlighted = (highlightKey == stringResource(R.string.system_update)),
+                        icon = painterResource(R.drawable.update),
+                        title = { Text(stringResource(R.string.system_update)) },
+                        description = {
+                            if (isUpdateAvailable) {
+                                Text(
+                                    text = "New update is available",
+                                    color = androidx.compose.ui.graphics.Color.Red
+                                )
+                            } else {
+                                Text(stringResource(R.string.version, BuildConfig.VERSION_NAME))
+                            }
+                        },
+                        onClick = {
+                            val intent =
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://github.com/bipinsanjeeva/Noir-Music/releases")
+                                )
+                            context.startActivity(intent)
+                        }
+                    )
+                )
+        )
+
+        Text(
+            text = "Download the latest Noir Music releases from GitHub.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp)
+        )
+
+        releaseNotes?.let { notes ->
+            echo.music.iad1tya.ui.component.PreferenceGroupTitle(title = "What's New")
+            androidx.compose.material3.Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp),
+                colors =
+                    androidx.compose.material3.CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                    ),
+                elevation = androidx.compose.material3.CardDefaults.cardElevation(defaultElevation = 0.dp)
+            ) {
+                Column(modifier = Modifier.fillMaxWidth().padding(20.dp)) {
+                    val (effectiveDescription, effectiveSections) =
+                        remember(notes) { parseMarkdownToSections(notes) }
+
+                    if (!effectiveDescription.isNullOrBlank()) {
+                        Text(
+                            text = parseSimpleMarkdown(effectiveDescription, MaterialTheme.colorScheme.primary),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                    }
+
+                    if (effectiveSections.isNotEmpty()) {
+                        effectiveSections.forEachIndexed { sectionIndex, section ->
+                            if (section.title.isNotBlank()) {
+                                Text(
+                                    text = parseSimpleMarkdown(section.title, MaterialTheme.colorScheme.primary),
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier =
+                                        Modifier.padding(
+                                            top =
+                                                if (sectionIndex == 0 && effectiveDescription.isNullOrBlank()) 0.dp
+                                                else 10.dp,
+                                            bottom = 4.dp
+                                        )
+                                )
+                            }
+
+                            section.items.forEach { item ->
+                                if (item.isNotBlank()) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        Text(
+                                            text = "•",
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.primary,
+                                            fontWeight = FontWeight.Bold,
+                                        )
+                                        Text(
+                                            text = parseSimpleMarkdown(item.trim(), MaterialTheme.colorScheme.primary),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    } else if (effectiveDescription.isNullOrBlank()) {
+                        Text(
+                            text = parseSimpleMarkdown(notes, MaterialTheme.colorScheme.primary),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Spacer(
+            Modifier.windowInsetsPadding(
+                LocalPlayerAwareWindowInsets.current.only(WindowInsetsSides.Bottom)
+            )
+        )
+    }
+
+    TopAppBar(
+        title = { Text(stringResource(R.string.update_settings_title)) },
+        navigationIcon = {
+            IconButton(onClick = navController::navigateUp, onLongClick = navController::backToMain) {
+                Icon(painterResource(R.drawable.arrow_back), contentDescription = null)
+            }
+        }
     )
-  }
-
-  TopAppBar(
-    title = { Text(stringResource(R.string.update_settings_title)) },
-    navigationIcon = {
-      IconButton(onClick = navController::navigateUp, onLongClick = navController::backToMain) {
-        Icon(painterResource(R.drawable.arrow_back), contentDescription = null)
-      }
-    }
-  )
 }

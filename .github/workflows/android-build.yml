@@ -65,5 +65,5 @@ jobs:
     - name: Upload Universal APK
       uses: actions/upload-artifact@v7
       with:
-        name: Echo-Music-Universal-APK
+        name: Noir-Music-Universal-APK
         path: app/build/outputs/apk/**/*.apk

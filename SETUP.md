@@ -7,8 +7,8 @@ Prerequisites
 - Git
   Initial Setup
 1. Clone the Repository
-   git clone https://github.com/bipinsanjeeva/Echo-Music.git
-   cd Echo-Music
+   git clone https://github.com/bipinsanjeeva/Noir-Music.git
+   cd Noir-Music
 2. Configure Local Properties
    Create a local.properties file from the template:
    cp local.properties.template local.properties
