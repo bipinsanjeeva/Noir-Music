@@ -351,14 +351,8 @@ class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     installSplashScreen()
     super.onCreate(savedInstanceState)
-    try {
-      startService(Intent(this, echo.music.iad1tya.playback.MusicService::class.java))
-    } catch (e: Exception) {
-      timber.log.Timber.e(e, "Failed to pre-start MusicService for warmup")
-    }
     window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
     WindowCompat.setDecorFitsSystemWindows(window, false)
-    listenTogetherManager.initialize()
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
       val locale =
         dataStore[AppLanguageKey]
