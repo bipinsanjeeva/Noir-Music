@@ -1132,12 +1132,12 @@ class MainActivity : ComponentActivity() {
                     title = {
                       Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp)
                       ) {
                         Icon(
                           painter = painterResource(R.mipmap.ic_launcher_foreground),
                           contentDescription = null,
-                          modifier = Modifier.size(40.dp)
+                          modifier = Modifier.size(48.dp).graphicsLayer { scaleX = 1.35f; scaleY = 1.35f }
                         )
                         Text(
                           text = currentTitle,
