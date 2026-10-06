@@ -221,11 +221,6 @@ fun MiniPlayer(
     val bgTint =
       if (useGlass) Color.Transparent
       else if (pureBlack) Color.Black else MaterialTheme.colorScheme.surfaceContainerHigh
-    android.util.Log.d(
-      "COLOR_MATCH",
-      "MiniPlayer - isFollowTheme: $isFollowTheme, globalPureBlack: $globalPureBlack, pureBlackMini: $pureBlackMini, pureBlack final: $pureBlack, bgTint: $bgTint"
-    )
-
     val tabBarContentModifier =
       if (useGlass) {
         Modifier.liquidGlass(
