@@ -1,4 +1,4 @@
-package echo.music.iad1tya.ui.screens.settings
+﻿package echo.music.iad1tya.ui.screens.settings
 
 import android.app.Activity
 import android.content.Context
@@ -147,7 +147,7 @@ fun AppearanceSettings(
 
   val (selectedFontValue) = rememberPreference(SelectedFontKey, defaultValue = AppFont.SYSTEM.value)
   val (dynamicTheme, onDynamicThemeChange) =
-    rememberPreference(DynamicThemeKey, defaultValue = true)
+    rememberPreference(DynamicThemeKey, defaultValue = false)
   val (enableLegacyIcon, onEnableLegacyIconChange) =
     rememberPreference(echo.music.iad1tya.constants.EnableLegacyIconKey, defaultValue = false)
 
@@ -2007,3 +2007,4 @@ enum class PlayerTextAlignment {
   SIDED,
   CENTER,
 }
+

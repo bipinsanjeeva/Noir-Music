@@ -245,8 +245,8 @@ fun ThumbnailCornerRadiusModal(
           ) {
             TextButton(
               onClick = {
-                thumbnailCornerRadius = 3f
-                customValue = "3"
+                thumbnailCornerRadius = 20f
+                customValue = "20"
                 isCustomSelected = true
               },
               modifier = Modifier.heightIn(min = 48.dp)

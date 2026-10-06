@@ -98,10 +98,10 @@ fun WelcomeDialog(onDismissRequest: () -> Unit) {
                     WelcomeActionRow(
                         icon = painterResource(R.drawable.upi_new),
                         title = "UPI",
-                        subtitle = "here.bipins@oksbi",
+                        subtitle = "here.bipins@okicici",
                         onClick = {
                             uriHandler.openUri(
-                                "upi://pay?pa=here.bipins@oksbi&pn=Noir%20Music&cu=INR"
+                                "upi://pay?pa=here.bipins@okicici&pn=Noir%20Music&cu=INR"
                             )
                         }
                     )

@@ -3,9 +3,7 @@
   ExperimentalLayoutApi::class,
   ExperimentalMaterial3Api::class
 )
-
 package echo.music.iad1tya.ui.screens.settings
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
@@ -78,30 +76,25 @@ import echo.music.iad1tya.constants.SelectedThemeColorKey
 import echo.music.iad1tya.ui.theme.DefaultThemeColor
 import echo.music.iad1tya.utils.rememberEnumPreference
 import echo.music.iad1tya.utils.rememberPreference
-
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ThemeScreen(navController: NavController, highlightKey: String? = null) {
-  val (darkMode, onDarkModeChange) = rememberEnumPreference(DarkModeKey, DarkMode.AUTO)
-  val (pureBlack, onPureBlackChangeRaw) = rememberPreference(PureBlackKey, defaultValue = false)
+  val (darkMode, onDarkModeChange) = rememberEnumPreference(DarkModeKey, DarkMode.ON)
+  val (pureBlack, onPureBlackChangeRaw) = rememberPreference(PureBlackKey, defaultValue = true)
   val (_, onPureBlackMiniPlayerChange) =
     rememberPreference(PureBlackMiniPlayerKey, defaultValue = false)
-
   val onPureBlackChange: (Boolean) -> Unit = { enabled ->
     onPureBlackChangeRaw(enabled)
     onPureBlackMiniPlayerChange(enabled)
   }
   val (selectedThemeColorInt, onSelectedThemeColorChange) =
     rememberPreference(SelectedThemeColorKey, DefaultThemeColor.toArgb())
-  val (_, onDynamicThemeChange) = rememberPreference(DynamicThemeKey, defaultValue = true)
-
+  val (_, onDynamicThemeChange) = rememberPreference(DynamicThemeKey, defaultValue = false)
   val selectedThemeColor = Color(selectedThemeColorInt)
-
   val handleColorSelection: (Color) -> Unit = { color ->
     onSelectedThemeColorChange(color.toArgb())
     onDynamicThemeChange(color == DefaultThemeColor)
   }
-
   Scaffold(
     topBar = {
       TopAppBar(
@@ -146,7 +139,6 @@ fun ThemeScreen(navController: NavController, highlightKey: String? = null) {
           fontWeight = FontWeight.Bold,
           modifier = Modifier.padding(bottom = 12.dp, start = 4.dp)
         )
-
         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
           Row(
             modifier = Modifier.fillMaxWidth(),
@@ -200,14 +192,12 @@ fun ThemeScreen(navController: NavController, highlightKey: String? = null) {
           }
         }
       }
-
       item {
         HorizontalDivider(
           modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
           color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
         )
       }
-
       item {
         Text(
           text = stringResource(R.string.color_palette),
@@ -216,7 +206,6 @@ fun ThemeScreen(navController: NavController, highlightKey: String? = null) {
           fontWeight = FontWeight.Bold,
           modifier = Modifier.padding(bottom = 16.dp, start = 4.dp)
         )
-
         Card(
           modifier = Modifier.fillMaxWidth(),
           shape = RoundedCornerShape(32.dp),
@@ -283,7 +272,6 @@ fun ThemeScreen(navController: NavController, highlightKey: String? = null) {
                 }
               )
             }
-
             AnimatedVisibility(visible = !isDynamic) {
               HsvColorPicker(
                 initialColor =
@@ -298,7 +286,6 @@ fun ThemeScreen(navController: NavController, highlightKey: String? = null) {
     }
   }
 }
-
 @Composable
 fun ThemeModeCard(
   modifier: Modifier = Modifier,
@@ -319,14 +306,12 @@ fun ThemeModeCard(
       animationSpec = spring(stiffness = Spring.StiffnessMedium),
       label = "borderWidth"
     )
-
   val borderColor =
     if (isSelected) {
       MaterialTheme.colorScheme.primary
     } else {
       MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
     }
-
   val backgroundBrush =
     if (isSelected) {
       Brush.linearGradient(
@@ -345,7 +330,6 @@ fun ThemeModeCard(
           )
       )
     }
-
   Box(
     modifier =
       modifier
@@ -382,7 +366,6 @@ fun ThemeModeCard(
     }
   }
 }
-
 @Composable
 fun HsvColorPicker(
   modifier: Modifier = Modifier,
@@ -394,7 +377,6 @@ fun HsvColorPicker(
     android.graphics.Color.colorToHSV(initialColor.toArgb(), h)
     mutableStateOf(h)
   }
-
   LaunchedEffect(initialColor) {
     val currentC = android.graphics.Color.HSVToColor(hsv)
     if (currentC != initialColor.toArgb()) {
@@ -403,25 +385,20 @@ fun HsvColorPicker(
       hsv = h
     }
   }
-
   var hue by remember { mutableFloatStateOf(hsv[0]) }
   var saturation by remember { mutableFloatStateOf(hsv[1]) }
   var value by remember { mutableFloatStateOf(hsv[2]) }
-
   LaunchedEffect(hsv) {
     hue = hsv[0]
     saturation = hsv[1]
     value = hsv[2]
   }
-
   fun getLocalColor(): Color =
     Color(android.graphics.Color.HSVToColor(floatArrayOf(hue, saturation, value)))
-
   fun commitColor() {
     hsv = floatArrayOf(hue, saturation, value)
     onColorCommit(getLocalColor())
   }
-
   Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
     Box(
       modifier =
@@ -430,7 +407,6 @@ fun HsvColorPicker(
           .clip(RoundedCornerShape(16.dp))
           .background(getLocalColor())
     )
-
     CustomColorSlider(
       value = hue,
       onValueChange = { hue = it },
@@ -453,7 +429,6 @@ fun HsvColorPicker(
     )
   }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomColorSlider(

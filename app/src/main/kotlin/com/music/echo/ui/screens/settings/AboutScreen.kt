@@ -228,12 +228,12 @@ fun AboutScreen(
                                 },
 
                                 description = {
-                                    Text("here.bipins@oksbi")
+                                    Text("here.bipins@okicici")
                                 },
 
                                 onClick = {
                                     uriHandler.openUri(
-                                        "upi://pay?pa=here.bipins@oksbi&pn=Noir%20Music&cu=INR"
+                                        "upi://pay?pa=here.bipins@okicici&pn=Noir%20Music&cu=INR"
                                     )
                                 }
                             )

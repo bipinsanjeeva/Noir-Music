@@ -1,4 +1,4 @@
-package echo.music.iad1tya.ui.screens.settings
+﻿package echo.music.iad1tya.ui.screens.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -69,7 +69,7 @@ fun GlassEffectSettings(
   scrollBehavior: TopAppBarScrollBehavior,
 ) {
   val (globalEnabled, onGlobalEnabledChange) =
-    rememberPreference(LiquidGlassGlobalEnabledKey, defaultValue = false)
+    rememberPreference(LiquidGlassGlobalEnabledKey, defaultValue = true)
   val (vibrancy, onVibrancyChange) = rememberPreference(LiquidGlassVibrancyKey, defaultValue = 1f)
   val (blurRadius, onBlurRadiusChange) =
     rememberPreference(LiquidGlassBlurRadiusKey, defaultValue = 8f)
@@ -692,3 +692,4 @@ fun GlassEffectSettings(
     }
   )
 }
+

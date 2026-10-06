@@ -192,7 +192,7 @@ If Noir Music has been useful to you, consider supporting its development.
   <img src="assets/bmac.png" alt="Buy Me A Coffee Logo" width="140"/>
 </a>
 
-<a href="upi://pay?pa=here.bipins@oksbi&pn=Noir%20Music&cu=INR">
+<a href="upi://pay?pa=here.bipins@okicici&pn=Noir%20Music&cu=INR">
   <img src="assets/UPI.png" alt="UPI Logo" width="140"/>
 </a>
 

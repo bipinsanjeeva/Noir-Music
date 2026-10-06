@@ -1,5 +1,4 @@
 package echo.music.iad1tya
-
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ComponentName
@@ -235,9 +234,7 @@ import nl.dionsegijn.konfetti.core.Party
 import nl.dionsegijn.konfetti.core.Position
 import nl.dionsegijn.konfetti.core.emitter.Emitter
 import timber.log.Timber
-
 val EmphasizedEasing = CubicBezierEasing(0.2f, 0.0f, 0.0f, 1.0f)
-
 @Suppress("DEPRECATION", "ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE")
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -254,20 +251,14 @@ class MainActivity : ComponentActivity() {
     const val EXTRA_MEDIA_OUTPUT_PACKAGE_NAME = "com.android.settings.panel.extra.PACKAGE_NAME"
     const val EXTRA_AUTO_START_RECOGNITION = "auto_start_recognition"
   }
-
   @Inject lateinit var database: MusicDatabase
-
   @Inject lateinit var downloadUtil: DownloadUtil
-
   @Inject lateinit var syncUtils: SyncUtils
-
   @Inject
   lateinit var listenTogetherManager: echo.music.iad1tya.listentogether.ListenTogetherManager
   private lateinit var navController: NavHostController
   private var pendingIntent: Intent? = null
-
   private var playerConnection by mutableStateOf<PlayerConnection?>(null)
-
   private val serviceConnection =
     object : ServiceConnection {
       override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -276,11 +267,9 @@ class MainActivity : ComponentActivity() {
             playerConnection =
               PlayerConnection(this@MainActivity, service, database, lifecycleScope)
             Timber.tag("MainActivity").d("PlayerConnection created successfully")
-
             listenTogetherManager.setPlayerConnection(playerConnection)
           } catch (e: Exception) {
             Timber.tag("MainActivity").e(e, "Failed to create PlayerConnection")
-
             lifecycleScope.launch {
               delay(500)
               try {
@@ -294,18 +283,14 @@ class MainActivity : ComponentActivity() {
           }
         }
       }
-
       override fun onServiceDisconnected(name: ComponentName?) {
-
         listenTogetherManager.setPlayerConnection(null)
         playerConnection?.dispose()
         playerConnection = null
       }
     }
-
   override fun onStart() {
     super.onStart()
-
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       if (
         ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
@@ -318,15 +303,12 @@ class MainActivity : ComponentActivity() {
         )
       }
     }
-
     bindService(Intent(this, MusicService::class.java), serviceConnection, BIND_AUTO_CREATE)
   }
-
   override fun onStop() {
     unbindService(serviceConnection)
     super.onStop()
   }
-
   override fun onDestroy() {
     super.onDestroy()
     val wasPlaying = playerConnection?.isPlaying?.value == true
@@ -337,7 +319,6 @@ class MainActivity : ComponentActivity() {
       playerConnection = null
     }
   }
-
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
     setIntent(intent)
@@ -349,9 +330,7 @@ class MainActivity : ComponentActivity() {
       pendingIntent = intent
     }
   }
-
   private var isPlaying = false
-
   override fun startForegroundService(service: Intent): android.content.ComponentName? {
     return try {
       super.startForegroundService(service)
@@ -367,24 +346,19 @@ class MainActivity : ComponentActivity() {
       }
     }
   }
-
   @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
   @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     installSplashScreen()
     super.onCreate(savedInstanceState)
-
     try {
       startService(Intent(this, echo.music.iad1tya.playback.MusicService::class.java))
     } catch (e: Exception) {
       timber.log.Timber.e(e, "Failed to pre-start MusicService for warmup")
     }
-
     window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
     WindowCompat.setDecorFitsSystemWindows(window, false)
-
     listenTogetherManager.initialize()
-
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
       val locale =
         dataStore[AppLanguageKey]
@@ -392,7 +366,6 @@ class MainActivity : ComponentActivity() {
           ?.let { Locale.forLanguageTag(it) } ?: Locale.getDefault()
       setAppLocale(this, locale)
     }
-
     if (java.io.File(filesDir, "clear_export_state").exists()) {
       lifecycleScope.launch {
         dataStore.edit { preferences ->
@@ -403,7 +376,6 @@ class MainActivity : ComponentActivity() {
         java.io.File(filesDir, "clear_export_state").delete()
       }
     }
-
     lifecycleScope.launch {
       dataStore.data
         .map {
@@ -425,7 +397,6 @@ class MainActivity : ComponentActivity() {
           }
         }
     }
-
     lifecycleScope.launch {
       dataStore.data
         .map {
@@ -461,7 +432,6 @@ class MainActivity : ComponentActivity() {
           }
         }
     }
-
     setContent {
       echomusicApp(
         playerConnection = playerConnection,
@@ -471,7 +441,6 @@ class MainActivity : ComponentActivity() {
       )
     }
   }
-
   @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
   @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
   @Composable
@@ -481,7 +450,7 @@ class MainActivity : ComponentActivity() {
     downloadUtil: DownloadUtil,
     syncUtils: SyncUtils,
   ) {
-    val enableDynamicTheme by rememberPreference(DynamicThemeKey, defaultValue = true)
+    val enableDynamicTheme by rememberPreference(DynamicThemeKey, defaultValue = false)
     val enableHighRefreshRate by rememberPreference(EnableHighRefreshRateKey, defaultValue = true)
     val context = LocalContext.current
     var showUpdateDialog by remember { androidx.compose.runtime.mutableStateOf(false) }
@@ -501,12 +470,10 @@ class MainActivity : ComponentActivity() {
         null
       )
     }
-
     LaunchedEffect(Unit) {
       val currentVersion = BuildConfig.VERSION_NAME
       val lastSeenVersion =
         echo.music.iad1tya.echomusic.updater.getLastSeenChangelogVersion(context)
-
       if (lastSeenVersion.isEmpty() || lastSeenVersion != currentVersion) {
         // Run migrations for fresh installs and updates
         context.dataStore.edit { preferences ->
@@ -514,7 +481,6 @@ class MainActivity : ComponentActivity() {
           preferences[echo.music.iad1tya.constants.EnableCronetKey] = true
         }
       }
-
       if (lastSeenVersion.isEmpty()) {
         // Fresh install, not an update — nothing "new" to show, so mark this
         // version seen right away rather than waiting on a dialog dismissal.
@@ -526,12 +492,9 @@ class MainActivity : ComponentActivity() {
         whatsNewInfo = echo.music.iad1tya.echomusic.updater.fetchChangelogForVersion(currentVersion)
       }
     }
-
     LaunchedEffect(Unit) {
       val prefs = context.dataStore.data.first()
-
       if (getAutoUpdateCheckSetting(context)) {
-
         delay(2000L)
         checkForUpdate(
           context = context,
@@ -542,14 +505,12 @@ class MainActivity : ComponentActivity() {
               "Startup check success. Latest: $latestVersion, Current: $currentVersion, isAvailable: $isAvailable"
             )
             saveUpdateAvailableState(context, isAvailable)
-
             if (isAvailable) {
               availableUpdateVersion = latestVersion
               availableUpdateChangelog = changelog
               availableUpdateDescription = description
               showUpdateDialog = true
             }
-
             if (isAvailable && getUpdateNotificationsSetting(context)) {
               Log.d("UpdateCheck", "Posting update notification for $latestVersion")
               UpdateNotificationHelper.showUpdateNotification(context, latestVersion)
@@ -559,7 +520,6 @@ class MainActivity : ComponentActivity() {
         )
       }
     }
-
     val HasShownBirthdayNotificationKey = remember {
       androidx.datastore.preferences.core.booleanPreferencesKey("has_shown_birthday_notification")
     }
@@ -576,11 +536,9 @@ class MainActivity : ComponentActivity() {
                 android.Manifest.permission.POST_NOTIFICATIONS
               ) == android.content.pm.PackageManager.PERMISSION_GRANTED
           ) {
-
             val channelId = "birthday_channel"
             val notificationManager =
               context.getSystemService(android.app.NotificationManager::class.java)
-
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
               val channel =
                 android.app.NotificationChannel(
@@ -590,13 +548,11 @@ class MainActivity : ComponentActivity() {
                 )
               notificationManager.createNotificationChannel(channel)
             }
-
             val bitmap =
               android.graphics.BitmapFactory.decodeResource(
                 context.resources,
                 R.drawable.birthday_image
               )
-
             val notification =
               androidx.core.app.NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.echomusicnotification) // Use correct transparent echo icon
@@ -611,9 +567,7 @@ class MainActivity : ComponentActivity() {
                 .setPriority(androidx.core.app.NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)
                 .build()
-
             notificationManager.notify(1014, notification)
-
             context.dataStore.edit { preferences ->
               preferences[HasShownBirthdayNotificationKey] = true
             }
@@ -621,7 +575,6 @@ class MainActivity : ComponentActivity() {
         }
       }
     }
-
     LaunchedEffect(enableHighRefreshRate) {
       val window = this@MainActivity.window
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -633,7 +586,6 @@ class MainActivity : ComponentActivity() {
           val mode60 =
             modes.firstOrNull { kotlin.math.abs(it.refreshRate - 60f) < 1f }
               ?: modes.minByOrNull { kotlin.math.abs(it.refreshRate - 60f) }
-
           if (mode60 != null) {
             layoutParams.preferredDisplayModeId = mode60.modeId
           }
@@ -649,39 +601,31 @@ class MainActivity : ComponentActivity() {
         window.attributes = params
       }
     }
-
-    val darkTheme by rememberEnumPreference(DarkModeKey, defaultValue = DarkMode.AUTO)
+    val darkTheme by rememberEnumPreference(DarkModeKey, defaultValue = DarkMode.ON)
     val isSystemInDarkTheme = isSystemInDarkTheme()
     val useDarkTheme =
       remember(darkTheme, isSystemInDarkTheme) {
         if (darkTheme == DarkMode.AUTO) isSystemInDarkTheme else darkTheme == DarkMode.ON
       }
-
     LaunchedEffect(useDarkTheme) { setSystemBarAppearance(useDarkTheme) }
-
-    val pureBlackEnabled by rememberPreference(PureBlackKey, defaultValue = false)
+    val pureBlackEnabled by rememberPreference(PureBlackKey, defaultValue = true)
     val pureBlack = remember(pureBlackEnabled, useDarkTheme) { pureBlackEnabled && useDarkTheme }
-
     val (selectedThemeColorInt) =
       rememberPreference(SelectedThemeColorKey, defaultValue = DefaultThemeColor.toArgb())
     val selectedThemeColor = Color(selectedThemeColorInt)
-
     var themeColor by
       rememberSaveable(stateSaver = ColorSaver) { mutableStateOf(selectedThemeColor) }
-
     LaunchedEffect(selectedThemeColor) {
       if (!enableDynamicTheme) {
         themeColor = selectedThemeColor
       }
     }
-
     LaunchedEffect(playerConnection, enableDynamicTheme, selectedThemeColor) {
       val playerConnection = playerConnection
       if (!enableDynamicTheme || playerConnection == null) {
         themeColor = selectedThemeColor
         return@LaunchedEffect
       }
-
       playerConnection.service.currentMediaMetadata.collectLatest { song ->
         if (song?.thumbnailUrl != null) {
           withContext(Dispatchers.IO) {
@@ -699,7 +643,6 @@ class MainActivity : ComponentActivity() {
                 )
               themeColor = result.image?.toBitmap()?.extractThemeColor() ?: selectedThemeColor
             } catch (e: Exception) {
-
               themeColor = selectedThemeColor
             }
           }
@@ -708,14 +651,12 @@ class MainActivity : ComponentActivity() {
         }
       }
     }
-
     echomusicTheme(
       darkTheme = useDarkTheme,
       pureBlack = pureBlack,
       themeColor = themeColor,
     ) {
       val hapticHelper = rememberHapticHelper()
-
       if (showUpdateDialog) {
         echo.music.iad1tya.echomusic.component.UpdateAvailableDialog(
           version = availableUpdateVersion,
@@ -763,7 +704,6 @@ class MainActivity : ComponentActivity() {
         val windowsInsets = WindowInsets.systemBars
         val bottomInset = with(density) { windowsInsets.getBottom(density).toDp() }
         val bottomInsetDp = WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
-
         val navController = rememberNavController()
         val blockedArtists by
           dataStore.data
@@ -779,9 +719,7 @@ class MainActivity : ComponentActivity() {
           remember(navController) {
             {} // User requested to disable opening the recognize music page on long press
           }
-
         val (previousTab, setPreviousTab) = rememberSaveable { mutableStateOf("home") }
-
         val (listenTogetherInTopBar) =
           rememberPreference(ListenTogetherInTopBarKey, defaultValue = true)
         val navigationItems =
@@ -804,7 +742,6 @@ class MainActivity : ComponentActivity() {
             else -> null
           }
         }
-
         val topLevelScreens = remember {
           listOf(
             Screens.Home.route,
@@ -813,15 +750,12 @@ class MainActivity : ComponentActivity() {
             "settings",
           )
         }
-
         val (query, onQueryChange) =
           rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(TextFieldValue()) }
-
         val onSearch: (String) -> Unit = remember {
           { searchQuery ->
             if (searchQuery.isNotEmpty()) {
               navController.navigate("search/${URLEncoder.encode(searchQuery, "UTF-8")}")
-
               if (dataStore[PauseSearchHistoryKey] != true) {
                 lifecycleScope.launch(Dispatchers.IO) {
                   database.query { insert(SearchHistory(query = searchQuery)) }
@@ -830,15 +764,12 @@ class MainActivity : ComponentActivity() {
             }
           }
         }
-
         val currentRoute by remember { derivedStateOf { navBackStackEntry?.destination?.route } }
-
         val inSearchScreen by remember {
           derivedStateOf { currentRoute?.startsWith("search/") == true }
         }
         val navigationItemRoutes =
           remember(navigationItems) { navigationItems.map { it.route }.toSet() }
-
         val shouldShowNavigationBar =
           remember(currentRoute, navigationItemRoutes) {
             currentRoute == null ||
@@ -849,28 +780,22 @@ class MainActivity : ComponentActivity() {
               currentRoute!!.startsWith("local_playlist/") ||
               currentRoute!!.startsWith("artist/")
           }
-
         val isLandscape = configuration.containerDpSize.width > configuration.containerDpSize.height
-
         val showRail = isLandscape && !inSearchScreen && currentRoute != "ambient_mode"
-
         val navPadding =
           if (shouldShowNavigationBar && !showRail) {
             NavigationBarHeight + FloatingToolbarBottomPadding
           } else {
             0.dp
           }
-
         val navigationBarHeight by
           animateDpAsState(
             targetValue = if (shouldShowNavigationBar && !showRail) NavigationBarHeight else 0.dp,
             animationSpec = NavigationBarAnimationSpec,
             label = "navBarHeight",
           )
-
         val (useFloatingNavBar) = rememberPreference(UseFloatingNavBarKey, defaultValue = false)
         val floatingNavBarScrollConnection = rememberFloatingTabBarScrollConnection()
-
         val playerBottomSheetState =
           rememberBottomSheetState(
             dismissedBound = 0.dp,
@@ -885,12 +810,10 @@ class MainActivity : ComponentActivity() {
               },
             expandedBound = maxHeight,
           )
-
         var expandQueueRequested by remember { mutableStateOf(false) }
         var showPlayerMenuRequested by remember { mutableStateOf(false) }
         var showAudioDeviceBottomSheet by remember { mutableStateOf(false) }
         var showLyricsRequested by remember { mutableStateOf(false) }
-
         val handleWidgetAction: (Intent) -> Unit = remember {
           { targetIntent ->
             when (targetIntent.action) {
@@ -931,7 +854,6 @@ class MainActivity : ComponentActivity() {
             }
           }
         }
-
         val onShuffleClick: (() -> Unit)? =
           remember(playerConnection, playerBottomSheetState) {
             playerConnection?.let { connection ->
@@ -946,7 +868,6 @@ class MainActivity : ComponentActivity() {
         val shuffleEnabled by
           playerConnection?.shuffleModeEnabled?.collectAsState()
             ?: remember { mutableStateOf(false) }
-
         val onMusicRecognitionClick: (() -> Unit) =
           remember(navController, playerBottomSheetState) {
             {
@@ -956,12 +877,10 @@ class MainActivity : ComponentActivity() {
               navController.navigate("recognition") { launchSingleTop = true }
             }
           }
-
         val mediaMetadata by
           playerConnection?.mediaMetadata?.collectAsState() ?: remember { mutableStateOf(null) }
         val hasDockedPlayerAccessory =
           useFloatingNavBar && mediaMetadata != null && !showRail && shouldShowNavigationBar
-
         val playerAwareWindowInsets =
           remember(
             bottomInset,
@@ -986,7 +905,6 @@ class MainActivity : ComponentActivity() {
               (playerBottomSheetState.isCollapsed || playerBottomSheetState.isDismissed)
           }
         )
-
         val topAppBarScrollBehavior =
           appBarScrollBehavior(
             canScroll = {
@@ -994,7 +912,6 @@ class MainActivity : ComponentActivity() {
                 (playerBottomSheetState.isCollapsed || playerBottomSheetState.isDismissed)
             },
           )
-
         LaunchedEffect(navBackStackEntry) {
           if (inSearchScreen) {
             val searchQuery =
@@ -1012,18 +929,14 @@ class MainActivity : ComponentActivity() {
           ) {
             onQueryChange(TextFieldValue())
           }
-
           if (navigationItems.fastAny { it.route == navBackStackEntry?.destination?.route }) {
             if (navigationItems.fastAny { it.route == previousTab }) {
               topAppBarScrollBehavior.state.resetHeightOffset()
             }
           }
-
           topAppBarScrollBehavior.state.resetHeightOffset()
-
           navController.currentBackStackEntry?.destination?.route?.let { setPreviousTab(it) }
         }
-
         LaunchedEffect(mediaMetadata) {
           if (mediaMetadata == null) {
             if (!playerBottomSheetState.isDismissed) {
@@ -1035,9 +948,7 @@ class MainActivity : ComponentActivity() {
             }
           }
         }
-
         var shouldShowTopBar by rememberSaveable { mutableStateOf(false) }
-
         LaunchedEffect(navBackStackEntry, listenTogetherInTopBar) {
           val currentRoute = navBackStackEntry?.destination?.route
           val isListenTogetherScreen =
@@ -1048,14 +959,11 @@ class MainActivity : ComponentActivity() {
               currentRoute != "settings" &&
               !(isListenTogetherScreen && listenTogetherInTopBar)
         }
-
         val coroutineScope = rememberCoroutineScope()
         var sharedSong: SongItem? by remember { mutableStateOf(null) }
         val snackbarHostState = remember { SnackbarHostState() }
         var showSettingDialoge by remember { mutableStateOf(false) }
-
         var showWelcomeDialog by remember { mutableStateOf(false) }
-
         LaunchedEffect(Unit) {
           val prefs = context.dataStore.data.first()
           val lastOpened = prefs[echo.music.iad1tya.constants.LastOpenedVersionCodeKey] ?: -1
@@ -1063,7 +971,6 @@ class MainActivity : ComponentActivity() {
             showWelcomeDialog = true
           }
         }
-
         LaunchedEffect(Unit) {
           val activeIntent = pendingIntent ?: intent
           if (activeIntent != null) {
@@ -1088,7 +995,6 @@ class MainActivity : ComponentActivity() {
             handleAssistantSearchIntent(intent, navController)
           }
         }
-
         DisposableEffect(Unit) {
           val listener =
             Consumer<Intent> { newIntent ->
@@ -1103,11 +1009,9 @@ class MainActivity : ComponentActivity() {
                 handleAssistantSearchIntent(newIntent, navController)
               }
             }
-
           addOnNewIntentListener(listener)
           onDispose { removeOnNewIntentListener(listener) }
         }
-
         val currentTitle =
           when (navBackStackEntry?.destination?.route) {
             Screens.Home.route -> "Noir Music"
@@ -1116,16 +1020,13 @@ class MainActivity : ComponentActivity() {
             Screens.ListenTogether.route -> stringResource(R.string.together)
             else -> ""
           }
-
         val pauseListenHistory by rememberPreference(PauseListenHistoryKey, defaultValue = false)
         val eventCount by database.eventCount().collectAsState(initial = 0)
         val showHistoryButton =
           remember(pauseListenHistory, eventCount) { !(pauseListenHistory && eventCount == 0) }
-
         val baseBg = if (pureBlack) Color.Black else MaterialTheme.colorScheme.surfaceContainer
-
         val (liquidGlassGlobalEnabled) =
-          rememberPreference(LiquidGlassGlobalEnabledKey, defaultValue = false)
+          rememberPreference(LiquidGlassGlobalEnabledKey, defaultValue = true)
         val (liquidGlassVibrancy) = rememberPreference(LiquidGlassVibrancyKey, defaultValue = 1f)
         val (liquidGlassBlurRadius) =
           rememberPreference(LiquidGlassBlurRadiusKey, defaultValue = 8f)
@@ -1149,7 +1050,6 @@ class MainActivity : ComponentActivity() {
           rememberPreference(LiquidGlassMiniPlayerEnabledKey, defaultValue = true)
         val (liquidGlassNavBarEnabled) =
           rememberPreference(LiquidGlassNavBarEnabledKey, defaultValue = true)
-
         val glassEffectConfig =
           remember(
             liquidGlassGlobalEnabled,
@@ -1187,15 +1087,12 @@ class MainActivity : ComponentActivity() {
               navBarEnabled = liquidGlassNavBarEnabled,
             )
           }
-
         val appBackdrop = rememberLayerBackdrop {
           drawRect(baseBg)
           drawContent()
         }
-
         val ringtoneViewModel: RingtoneViewModel = viewModel()
         val ringtoneUiState by ringtoneViewModel.uiState.collectAsState()
-
         val customHapticFeedback =
           remember(hapticHelper) {
             object : androidx.compose.ui.hapticfeedback.HapticFeedback {
@@ -1213,7 +1110,6 @@ class MainActivity : ComponentActivity() {
               }
             }
           }
-
         CompositionLocalProvider(
           LocalHapticFeedback provides customHapticFeedback,
           LocalGlassEffectConfig provides glassEffectConfig,
@@ -1327,7 +1223,6 @@ class MainActivity : ComponentActivity() {
                     if (playerBottomSheetState.isExpanded) {
                       playerBottomSheetState.collapseSoft()
                     }
-
                     if (isSelected) {
                       navController.currentBackStackEntry
                         ?.savedStateHandle
@@ -1342,7 +1237,6 @@ class MainActivity : ComponentActivity() {
                     }
                   }
                 }
-
               if (
                 !showRail &&
                   currentRoute != "update" &&
@@ -1363,10 +1257,8 @@ class MainActivity : ComponentActivity() {
                     showLyricsRequested = showLyricsRequested,
                     onLyricsShown = { showLyricsRequested = false },
                   )
-
                   val navSlideDistance =
                     bottomInset + FloatingToolbarBottomPadding + NavigationBarHeight
-
                   val navOffsetY =
                     if (navigationBarHeight == 0.dp) {
                       navSlideDistance
@@ -1380,7 +1272,6 @@ class MainActivity : ComponentActivity() {
                               NavigationBarHeight)
                       slideOffset + hideOffset
                     }
-
                   if (useFloatingNavBar) {
                     AppFloatingNavBar(
                       navigationItems = navigationItems,
@@ -1449,7 +1340,6 @@ class MainActivity : ComponentActivity() {
                             .height(NavigationBarHeight)
                       )
                     }
-
                     Box(
                       modifier =
                         Modifier.fillMaxWidth()
@@ -1489,7 +1379,6 @@ class MainActivity : ComponentActivity() {
                     onLyricsShown = { showLyricsRequested = false },
                   )
                 }
-
                 Box(
                   modifier =
                     Modifier.fillMaxWidth()
@@ -1529,7 +1418,6 @@ class MainActivity : ComponentActivity() {
                     if (playerBottomSheetState.isExpanded) {
                       playerBottomSheetState.collapseSoft()
                     }
-
                     if (isSelected) {
                       navController.currentBackStackEntry
                         ?.savedStateHandle
@@ -1544,7 +1432,6 @@ class MainActivity : ComponentActivity() {
                     }
                   }
                 }
-
               if (showRail && currentRoute != "update") {
                 AppNavigationRail(
                   navigationItems = navigationItems,
@@ -1579,7 +1466,6 @@ class MainActivity : ComponentActivity() {
                       navigationItems.indexOfFirst { it.route == targetState.destination.route }
                     val previousRouteIndex =
                       navigationItems.indexOfFirst { it.route == initialState.destination.route }
-
                     if (currentRouteIndex == -1 || currentRouteIndex > previousRouteIndex)
                       slideInHorizontally(animationSpec = tween(400, easing = EmphasizedEasing)) {
                         it / 8
@@ -1594,7 +1480,6 @@ class MainActivity : ComponentActivity() {
                       navigationItems.indexOfFirst { it.route == initialState.destination.route }
                     val targetRouteIndex =
                       navigationItems.indexOfFirst { it.route == targetState.destination.route }
-
                     if (targetRouteIndex == -1 || targetRouteIndex > currentRouteIndex)
                       slideOutHorizontally(animationSpec = tween(400, easing = EmphasizedEasing)) {
                         -it / 8
@@ -1609,7 +1494,6 @@ class MainActivity : ComponentActivity() {
                       navigationItems.indexOfFirst { it.route == targetState.destination.route }
                     val previousRouteIndex =
                       navigationItems.indexOfFirst { it.route == initialState.destination.route }
-
                     if (previousRouteIndex != -1 && previousRouteIndex < currentRouteIndex)
                       slideInHorizontally(animationSpec = tween(400, easing = EmphasizedEasing)) {
                         it / 8
@@ -1624,7 +1508,6 @@ class MainActivity : ComponentActivity() {
                       navigationItems.indexOfFirst { it.route == initialState.destination.route }
                     val targetRouteIndex =
                       navigationItems.indexOfFirst { it.route == targetState.destination.route }
-
                     if (currentRouteIndex != -1 && currentRouteIndex < targetRouteIndex)
                       slideOutHorizontally(animationSpec = tween(400, easing = EmphasizedEasing)) {
                         -it / 8
@@ -1648,23 +1531,19 @@ class MainActivity : ComponentActivity() {
               }
             }
           }
-
           BottomSheetMenu(
             state = LocalMenuState.current,
             modifier = Modifier.align(Alignment.BottomCenter)
           )
-
           BottomSheetPage(
             state = LocalBottomSheetPageState.current,
             modifier = Modifier.align(Alignment.BottomCenter)
           )
-
           if (showAudioDeviceBottomSheet) {
             AudioDeviceBottomSheet(
               onDismiss = { showAudioDeviceBottomSheet = false }
             )
           }
-
           sharedSong?.let { song ->
             playerConnection?.let {
               Dialog(
@@ -1690,7 +1569,6 @@ class MainActivity : ComponentActivity() {
               }
             }
           }
-
           RingtoneTrimmerDialog(
             isVisible = ringtoneUiState.showTrimmer,
             songId = ringtoneUiState.targetSongId,
@@ -1702,7 +1580,6 @@ class MainActivity : ComponentActivity() {
               ringtoneViewModel.setAsRingtone(this@MainActivity, start, end)
             }
           )
-
           if (ringtoneUiState.showProgress) {
             RingtoneProgressDialog(
               isVisible = ringtoneUiState.showProgress,
@@ -1714,7 +1591,6 @@ class MainActivity : ComponentActivity() {
               onOpenSettings = { ringtoneViewModel.openRingtoneSettings(this@MainActivity) }
             )
           }
-
           if (showSettingDialoge) {
             SettingDialoge(
               onDismissRequest = { showSettingDialoge = false },
@@ -1725,7 +1601,6 @@ class MainActivity : ComponentActivity() {
               homeViewModel = homeViewModel
             )
           }
-
           if (showWelcomeDialog) {
             WelcomeDialog(
               onDismissRequest = {
@@ -1739,7 +1614,6 @@ class MainActivity : ComponentActivity() {
               }
             )
           }
-
           var showPartyBomb by remember {
             val today = java.time.LocalDate.now()
             mutableStateOf(today.month == java.time.Month.OCTOBER && today.dayOfMonth == 14)
@@ -1797,7 +1671,6 @@ class MainActivity : ComponentActivity() {
       }
     }
   }
-
   private fun handleDeepLinkIntent(intent: Intent, navController: NavHostController) {
     var uri = intent.data
     if (uri == null) {
@@ -1811,11 +1684,9 @@ class MainActivity : ComponentActivity() {
       }
     }
     if (uri == null) return
-
     intent.data = null
     intent.removeExtra(Intent.EXTRA_TEXT)
     val coroutineScope = lifecycle.coroutineScope
-
     val listenCode =
       uri.getQueryParameter("code")
         ?: uri.getQueryParameter("room")
@@ -1828,7 +1699,6 @@ class MainActivity : ComponentActivity() {
       listenTogetherManager.joinRoom(listenCode, username)
       return
     }
-
     when (val path = uri.pathSegments.firstOrNull()) {
       "playlist" ->
         uri.getQueryParameter("list")?.let { playlistId ->
@@ -1862,9 +1732,7 @@ class MainActivity : ComponentActivity() {
               uri.pathSegments.firstOrNull()
             else -> null
           }
-
         val playlistId = uri.getQueryParameter("list")
-
         if (videoId != null) {
           coroutineScope.launch(Dispatchers.IO) {
             YouTube.queue(listOf(videoId), playlistId)
@@ -1910,7 +1778,6 @@ class MainActivity : ComponentActivity() {
       }
     }
   }
-
   @SuppressLint("ObsoleteSdkInt")
   private fun setSystemBarAppearance(isDark: Boolean) {
     WindowCompat.getInsetsController(window, window.decorView.rootView).apply {
@@ -1926,20 +1793,17 @@ class MainActivity : ComponentActivity() {
         (if (isDark) Color.Transparent else Color.Black.copy(alpha = 0.2f)).toArgb()
     }
   }
-
   private fun handleRecognitionIntent(
     intent: Intent,
     navController: NavHostController,
   ) {
     if (intent.action != ACTION_RECOGNITION) return
     val autoStart = intent.getBooleanExtra(EXTRA_AUTO_START_RECOGNITION, false)
-
     intent.removeExtra(EXTRA_AUTO_START_RECOGNITION)
     navController.navigate(if (autoStart) "recognition?autoStart=true" else "recognition") {
       launchSingleTop = true
     }
   }
-
   private fun handleAssistantSearchIntent(
     intent: Intent,
     navController: NavHostController,
@@ -1950,14 +1814,11 @@ class MainActivity : ComponentActivity() {
     }
   }
 }
-
 val LocalDatabase = staticCompositionLocalOf<MusicDatabase> { error("No database provided") }
 val LocalRingtoneViewModel =
   compositionLocalOf<RingtoneViewModel> { error("No RingtoneViewModel provided") }
-
 val LocalPlayerConnection =
   staticCompositionLocalOf<PlayerConnection?> { error("No PlayerConnection provided") }
-
 val LocalPlayerAwareWindowInsets =
   compositionLocalOf<WindowInsets> { error("No WindowInsets provided") }
 val LocalDownloadUtil = staticCompositionLocalOf<DownloadUtil> { error("No DownloadUtil provided") }

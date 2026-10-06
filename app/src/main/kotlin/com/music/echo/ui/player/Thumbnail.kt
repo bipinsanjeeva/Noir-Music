@@ -275,7 +275,7 @@ fun Thumbnail(
     )
   val isLocalMedia = mediaMetadata?.id?.isLocalMediaId() == true
   val playerBackground = playerBackgroundPref
-  val thumbnailCornerRadius by rememberPreference(ThumbnailCornerRadiusKey, defaultValue = 3f)
+  val thumbnailCornerRadius by rememberPreference(ThumbnailCornerRadiusKey, defaultValue = 20f)
 
   val textBackgroundColor = getTextColor(playerBackground)
 
