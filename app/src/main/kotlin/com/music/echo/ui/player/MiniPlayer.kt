@@ -1035,54 +1035,49 @@ private fun MiniPlayerColorExtractor(
 ) {
   val context = LocalContext.current
   val fallbackColor = MaterialTheme.colorScheme.surfaceContainer.toArgb()
+  val thumbnailUrl = mediaMetadata?.thumbnailUrl
+  val mediaId = mediaMetadata?.id
 
-  LaunchedEffect(mediaMetadata?.id, miniPlayerBackground) {
+  LaunchedEffect(mediaId, thumbnailUrl, miniPlayerBackground, fallbackColor) {
     if (
-      miniPlayerBackground == PlayerBackgroundStyle.GRADIENT ||
-        miniPlayerBackground == PlayerBackgroundStyle.GLOW_ANIMATED
+      thumbnailUrl == null ||
+        (miniPlayerBackground != PlayerBackgroundStyle.GRADIENT &&
+          miniPlayerBackground != PlayerBackgroundStyle.GLOW_ANIMATED)
     ) {
-      val currentMetadata = mediaMetadata
-      if (currentMetadata?.thumbnailUrl != null) {
-        withContext(Dispatchers.IO) {
-          val request =
-            ImageRequest.Builder(context)
-              .data(currentMetadata.thumbnailUrl)
-              .size(100, 100)
-              .allowHardware(false)
-              .build()
-
-          val result = runCatching { context.imageLoader.execute(request) }.getOrNull()
-          if (result != null) {
-            val bitmap = result.image?.toBitmap()
-            if (bitmap != null) {
-              val palette =
-                withContext(Dispatchers.Default) {
-                  Palette.from(bitmap).maximumColorCount(8).resizeBitmapArea(100 * 100).generate()
-                }
-              val extractedColors =
-                if (miniPlayerBackground == PlayerBackgroundStyle.GLOW_ANIMATED) {
-                  listOfNotNull(
-                      palette.getVibrantColor(fallbackColor).let { Color(it) },
-                      palette.getLightVibrantColor(fallbackColor).let { Color(it) },
-                      palette.getDarkVibrantColor(fallbackColor).let { Color(it) },
-                      palette.getMutedColor(fallbackColor).let { Color(it) },
-                      palette.getLightMutedColor(fallbackColor).let { Color(it) },
-                      palette.getDarkMutedColor(fallbackColor).let { Color(it) }
-                    )
-                    .distinct()
-                } else {
-                  PlayerColorExtractor.extractGradientColors(
-                    palette = palette,
-                    fallbackColor = fallbackColor
-                  )
-                }
-              withContext(Dispatchers.Main) { onGradientColorsChange(extractedColors) }
-            }
-          }
-        }
-      }
-    } else {
       onGradientColorsChange(emptyList())
+      return@LaunchedEffect
+    }
+
+    withContext(Dispatchers.IO) {
+      val request =
+        ImageRequest.Builder(context)
+          .data(thumbnailUrl)
+          .size(64, 64)
+          .allowHardware(false)
+          .memoryCacheKey("mini_gradient_$mediaId")
+          .build()
+
+      val result = runCatching { context.imageLoader.execute(request) }.getOrNull()
+      val bitmap = result?.image?.toBitmap() ?: return@withContext
+      val palette =
+        withContext(Dispatchers.Default) {
+          Palette.from(bitmap).maximumColorCount(8).resizeBitmapArea(64 * 64).generate()
+        }
+      val extractedColors =
+        if (miniPlayerBackground == PlayerBackgroundStyle.GLOW_ANIMATED) {
+          listOfNotNull(
+              palette.getVibrantColor(fallbackColor).let(::Color),
+              palette.getLightVibrantColor(fallbackColor).let(::Color),
+              palette.getDarkVibrantColor(fallbackColor).let(::Color),
+              palette.getMutedColor(fallbackColor).let(::Color),
+              palette.getLightMutedColor(fallbackColor).let(::Color),
+              palette.getDarkMutedColor(fallbackColor).let(::Color)
+            )
+            .distinct()
+        } else {
+          PlayerColorExtractor.extractGradientColors(palette, fallbackColor)
+        }
+      withContext(Dispatchers.Main) { onGradientColorsChange(extractedColors) }
     }
   }
 }
