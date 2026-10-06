@@ -77,10 +77,10 @@ internal const val LENS_MAX_DP = 48f
  * the now playing background is a deep-blurred material while only the small controls are clear
  * liquid glass.
  */
-internal const val PLAYER_BLUR_MULTIPLIER = 4f
+internal const val PLAYER_BLUR_MULTIPLIER = 2.5f
 
 /** Lowest resolution fraction glass surfaces are rendered at (heavy blur hides it). */
-internal const val MIN_GLASS_RESOLUTION_SCALE = 0.33f
+internal const val MIN_GLASS_RESOLUTION_SCALE = 0.25f
 
 /** Blur radius (dp) at or above which the minimum resolution scale is safe to use. */
 internal const val FULL_QUALITY_BLUR_DP = 8f

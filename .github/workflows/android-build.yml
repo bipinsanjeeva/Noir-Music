@@ -43,7 +43,7 @@ jobs:
         STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
       run: |
         chmod +x gradlew
-        ./gradlew assembleUniversalGmsRelease
+        ./gradlew assembleArm64FossRelease
 
     - name: Build Debug APK (fork PR fallback without signing)
       if: ${{ env.KEYSTORE_BASE64 == '' }}
@@ -60,10 +60,10 @@ jobs:
           -keyalg RSA \
           -validity 10000
         chmod +x gradlew
-        ./gradlew assembleUniversalFossDebug
+        ./gradlew assembleArm64FossDebug
 
     - name: Upload Universal APK
       uses: actions/upload-artifact@v7
       with:
-        name: Noir-Music-Universal-APK
+        name: Noir-Music-ARM64-FOSS-APK
         path: app/build/outputs/apk/**/*.apk

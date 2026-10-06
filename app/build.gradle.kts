@@ -265,7 +265,7 @@ dependencies {
   implementation(libs.compose.foundation)
   implementation(libs.compose.ui)
   implementation(libs.compose.ui.util)
-  implementation(libs.compose.ui.tooling)
+  debugImplementation(libs.compose.ui.tooling)
   implementation(libs.compose.animation)
   implementation(libs.compose.reorderable)
 
@@ -295,7 +295,6 @@ dependencies {
   implementation(libs.media3.ui)
   implementation(libs.media3.okhttp)
   implementation(libs.media3.cronet)
-  implementation("com.google.android.gms:play-services-cronet:18.0.1")
 
   // Google Cast - only included in GMS flavor (not available in F-Droid/FOSS builds)
   "gmsImplementation"(libs.mediarouter)

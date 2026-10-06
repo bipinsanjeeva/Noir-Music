@@ -348,7 +348,7 @@ fun BottomSheetPlayer(
     rememberPreference(echo.music.iad1tya.constants.AutomixDebugOverlayKey, false)
 
   var currentAudioFormat by remember { mutableStateOf<androidx.media3.common.Format?>(null) }
-  DisposableEffect(playerConnection, isCrossfading) {
+  DisposableEffect(playerConnection) {
     val playerToListen = playerConnection.player
     val listener =
       object : Player.Listener {
@@ -533,8 +533,10 @@ fun BottomSheetPlayer(
   var gradientColors by remember { mutableStateOf<List<Color>>(emptyList()) }
   val gradientColorsCache = remember { mutableMapOf<String, List<Color>>() }
 
-  if (!canSkipNext && automix.isNotEmpty()) {
-    playerConnection.service.addToQueueAutomix(automix[0], 0)
+  LaunchedEffect(canSkipNext, automix) {
+    if (!canSkipNext && automix.isNotEmpty()) {
+      playerConnection.service.addToQueueAutomix(automix[0], 0)
+    }
   }
 
   val bluetoothDeviceName by
@@ -630,7 +632,7 @@ fun BottomSheetPlayer(
           val request =
             ImageRequest.Builder(context)
               .data(currentMetadata.thumbnailUrl)
-              .size(100, 100)
+              .size(64, 64)
               .allowHardware(false)
               .memoryCacheKey("gradient_${currentMetadata.id}")
               .build()
@@ -641,7 +643,7 @@ fun BottomSheetPlayer(
             if (bitmap != null) {
               val palette =
                 withContext(Dispatchers.Default) {
-                  Palette.from(bitmap).maximumColorCount(8).resizeBitmapArea(100 * 100).generate()
+                  Palette.from(bitmap).maximumColorCount(8).resizeBitmapArea(64 * 64).generate()
                 }
               val extractedColors =
                 if (playerBackground == PlayerBackgroundStyle.GLOW_ANIMATED) {
