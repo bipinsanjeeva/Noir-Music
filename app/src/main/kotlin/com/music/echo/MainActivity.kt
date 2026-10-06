@@ -1130,14 +1130,24 @@ class MainActivity : ComponentActivity() {
                 Row {
                   TopAppBar(
                     title = {
-                      Text(
-                        text = currentTitle,
-                        style =
-                          MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 24.sp
-                          ),
-                      )
+                      Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(10.dp)
+                      ) {
+                        Icon(
+                          painter = painterResource(R.mipmap.ic_launcher_foreground),
+                          contentDescription = null,
+                          modifier = Modifier.size(28.dp)
+                        )
+                        Text(
+                          text = currentTitle,
+                          style =
+                            MaterialTheme.typography.titleLarge.copy(
+                              fontWeight = FontWeight.Bold,
+                              fontSize = 24.sp
+                            ),
+                        )
+                      }
                     },
                     actions = {
                       if (showHistoryButton) {
